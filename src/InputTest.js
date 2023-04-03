@@ -23,6 +23,7 @@ function InputTest() {
 	// const onReset = () => {
 	// 	setInputs({ name: '' });
 	// };
+
 	return (
 		<div>
 			<input placeholder="이름" onChange={onChange} value={text} />

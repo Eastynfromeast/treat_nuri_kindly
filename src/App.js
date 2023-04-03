@@ -1,5 +1,5 @@
 import './App.css';
-import InputTest from './InputTest';
+import InputTreats from './InputTreats';
 
 function App() {
 	return (
@@ -7,7 +7,7 @@ function App() {
 			<header className="App-header">
 				<h1>Treat Nuri Kindly</h1>
 			</header>
-			<InputTest />
+			<InputTreats />
 		</div>
 	);
 }
