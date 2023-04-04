@@ -1,5 +1,6 @@
 import './App.css';
-import InputTreats from './InputTreats';
+import TodaysTreats from './TodaysTreats';
+// import InputTreats from './InputTreats';
 
 function App() {
 	return (
@@ -7,7 +8,7 @@ function App() {
 			<header className="App-header">
 				<h1>Treat Nuri Kindly</h1>
 			</header>
-			<InputTreats />
+			<TodaysTreats />
 		</div>
 	);
 }
