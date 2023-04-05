@@ -1,7 +1,16 @@
+body {
+	background: #f8f9f4;
+}
+
+ul {
+	list-style: decimal;
+}
+
 .App {
 	text-align: center;
-	background: #f8f9f4;
 	min-height: 100vh;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {

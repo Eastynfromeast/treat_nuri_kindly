@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 
+// 클래스로 변경해보고 싶다
 const InputTreats = () => {
-	const [treats, setTreats] = useState([
-		{ id: 1, name: '소고기 ' },
-		{ id: 2, name: '오리고기' },
-		{ id: 3, name: '고구마' },
-	]);
+	const [treats, setTreats] = useState([{ id: 1, name: '간식 샘플' }]);
 	const [inputText, setInputText] = useState('');
-	const [nextId, setNextId] = useState(5);
+	const [nextId, setNextId] = useState(2);
 
-	const handleChange = e => setInputText(e.target.value);
+	const onChange = e => setInputText(e.target.value);
 	const handleClick = () => {
 		const newList = treats.concat({
 			id: nextId,
@@ -20,23 +17,27 @@ const InputTreats = () => {
 		setInputText('');
 	};
 	const handleDelete = id => {
-		const newList = treats.filter(season => treats.id !== id);
+		const newList = treats.filter(treats => treats.id !== id);
 		setTreats(newList);
 	};
 
 	const treatsList = treats.map(treats => (
-		<div key={treats.id}>
-			<li>
-				{treats.name}
-				<button onClick={() => handleDelete(treats.id)}>delete</button>
-			</li>
-		</div>
+		<li key={treats.id}>
+			{treats.name}
+			<button onClick={() => handleDelete(treats.id)}>delete</button>
+		</li>
 	));
+
+	const handleOnKeyPress = e => {
+		if (e.key === 'Enter') {
+			handleClick();
+		}
+	};
 
 	return (
 		<>
 			<ul>{treatsList}</ul>
-			<input value={inputText} onChange={handleChange} />
+			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={handleClick}>add</button>
 		</>
 	);
