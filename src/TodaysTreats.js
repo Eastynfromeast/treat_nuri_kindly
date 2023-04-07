@@ -1,7 +1,7 @@
 import React from 'react';
 import InputTreats from './InputTreats';
 
-function TodaysTreats() {
+const TodaysTreats = () => {
 	// const [treats, setTreats] = useState('');
 
 	function todayIs() {
@@ -24,6 +24,6 @@ function TodaysTreats() {
 			<InputTreats />
 		</div>
 	);
-}
+};
 
 export default TodaysTreats;

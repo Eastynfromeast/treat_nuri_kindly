@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // 클래스로 변경해보고 싶다
-const InputTreats = () => {
+function InputTreats() {
 	const [treats, setTreats] = useState([{ id: 1, name: '간식 샘플' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(2);
@@ -41,6 +41,6 @@ const InputTreats = () => {
 			<button onClick={handleClick}>add</button>
 		</>
 	);
-};
+}
 
 export default InputTreats;
