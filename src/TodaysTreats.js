@@ -22,6 +22,7 @@ const TodaysTreats = () => {
 			</div>
 			{/* <input placeholder="간식" onChange={onChange} value={treats} /> */}
 			<InputTreats />
+			<button id="Btn-submit-treats"> Update </button>
 		</div>
 	);
 };

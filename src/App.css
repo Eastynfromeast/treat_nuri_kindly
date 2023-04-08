@@ -41,3 +41,16 @@ ul {
 		transform: rotate(360deg);
 	}
 }
+
+#Btn-submit-treats {
+	display: block;
+	margin: 30px auto;
+	min-width: 120px;
+	height: 45px;
+	border-radius: 60px;
+	background: forestgreen;
+	color: ivory;
+	border: none;
+	font-weight: bold;
+	box-shadow: 3px 4px black;
+}
