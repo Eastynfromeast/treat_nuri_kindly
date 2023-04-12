@@ -42,7 +42,7 @@ ul {
 	}
 }
 
-#Btn-submit-treats {
+.Btn-submit-treats {
 	display: block;
 	margin: 30px auto;
 	min-width: 120px;
@@ -53,4 +53,8 @@ ul {
 	border: none;
 	font-weight: bold;
 	box-shadow: 3px 4px black;
+	text-align: center;
+}
+.Btn-submit-treats::placeholder {
+	color: ivory;
 }

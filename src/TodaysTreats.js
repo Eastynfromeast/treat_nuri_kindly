@@ -1,9 +1,6 @@
 import React from 'react';
 import InputTreats from './InputTreats';
-import database from './Firebase';
 import { getDownloadURL, ref, child, push, update } from 'firebase/database';
-
-console.log(database);
 
 function updateNewDailyTreats(date, dailyTreats) {
 	// A post entry.
@@ -21,31 +18,23 @@ function updateNewDailyTreats(date, dailyTreats) {
 
 	return update(ref(database), updates);
 }
-function setDate() {
-	let now = new Date();
-	let todayYear = now.getFullYear();
-	let todayMonth = now.getMonth() + 1;
-	let todayDate = now.getDate();
-	return todayYear + '.' + todayMonth + '.' + todayDate;
-}
 
-function TodaysTreats() {
-	// const [treats, setTreats] = useState('');
+function AddTodaysTreats() {
+	const setDate = () => {
+		let now = new Date();
+		let todayYear = now.getFullYear();
+		let todayMonth = now.getMonth() + 1;
+		let todayDate = now.getDate();
+		return todayYear + '-' + todayMonth + '-' + todayDate;
+	};
 
-	// const onChange = e => {
-	// 	setTreats(e.target.value);
-	// };
 	return (
-		<div id="container">
-			<div>
-				<h2>{setDate()}</h2>
-				{/* <p> {treats} </p> */}
-			</div>
-			{/* <input placeholder="간식" onChange={onChange} value={treats} /> */}
+		<div className="dailyTreats-data">
+			<h2>{setDate()}</h2>
 			<InputTreats />
-			<button id="Btn-submit-treats">Update</button>
+			<button className="Btn-submit-treats"> Update</button>
 		</div>
 	);
 }
 
-export default TodaysTreats;
+export default AddTodaysTreats;
