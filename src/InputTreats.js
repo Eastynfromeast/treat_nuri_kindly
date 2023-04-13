@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 
 // 클래스로 변경해보고 싶다
-function InputTreats() {
+function InputTreats({ getTreatsData }) {
 	const [treats, setTreats] = useState([{ id: 1, name: '간식 샘플' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(2);
@@ -33,6 +33,8 @@ function InputTreats() {
 			handleClick();
 		}
 	};
+
+	getTreatsData(treatsList);
 
 	return (
 		<>
