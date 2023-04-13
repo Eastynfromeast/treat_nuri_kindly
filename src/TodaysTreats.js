@@ -30,14 +30,14 @@ function AddTodaysTreats() {
 	};
 
 	const getTreatsData = x => {
-		console.log(x);
+		setTreatsData(x);
 	};
 
 	const handleTreatsChange = e => {
 		setTreatsData(e.target.value);
 	};
 
-	const [treatsData, setTreatsData] = useState('');
+	const [treatsData, setTreatsData] = useState([]);
 
 	// Write
 	const writeData = () => {

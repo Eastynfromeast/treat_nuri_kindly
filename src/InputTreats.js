@@ -34,7 +34,7 @@ function InputTreats({ getTreatsData }) {
 		}
 	};
 
-	getTreatsData(treatsList);
+	getTreatsData(treats);
 
 	return (
 		<>
