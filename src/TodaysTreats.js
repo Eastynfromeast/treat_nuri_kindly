@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import InputTreats from './InputTreats';
 import { getDownloadURL, ref, child, push, update, set } from 'firebase/database';
-import firebaseConfig, { database } from './Firebase';
 
 function updateNewDailyTreats(date, dailyTreats) {
 	// A post entry.
@@ -30,30 +29,20 @@ function AddTodaysTreats() {
 	};
 
 	const getTreatsData = x => {
-		setTreatsData(x);
+		console.log(x);
 	};
 
-	const handleTreatsChange = e => {
-		setTreatsData(e.target.value);
-	};
-
-	const [treatsData, setTreatsData] = useState([]);
-
-	// Write
-	const writeData = () => {
-		set(ref(database, 'test/'), {
-			treatsData,
-		});
-		setTreatsData('');
-	};
+	// const handleTreatsChange = e => {
+	// 	setTreatsData(e.target.value);
+	// };
 
 	return (
 		<div className="dailyTreats-data">
 			<h2>{setDate()}</h2>
 			<InputTreats getTreatsData={getTreatsData} />
 			<button className="Btn-submit-treats"> Update</button>
-			<input type="text" value={treatsData} onChange={handleTreatsChange}></input>
-			<button onClick={writeData}>write data</button>
+			{/* <input type="text" value={treatsData} onChange={handleTreatsChange}></input> */}
+			{/* <button onClick={writeData}>write data</button> */}
 		</div>
 	);
 }

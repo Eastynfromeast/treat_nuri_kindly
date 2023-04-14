@@ -1,7 +1,8 @@
 import React, { useState, useRef, forwardRef } from 'react';
+import firebaseConfig, { database } from './Firebase';
 
 // 클래스로 변경해보고 싶다
-function InputTreats({ getTreatsData }) {
+function InputTreats() {
 	const [treats, setTreats] = useState([{ id: 1, name: '간식 샘플' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(2);
@@ -34,13 +35,21 @@ function InputTreats({ getTreatsData }) {
 		}
 	};
 
-	getTreatsData(treats);
-
+	// getTreatsData(treatsList);
+	const [treatsData, setTreatsData] = useState([]);
+	// Write
+	const writeData = () => {
+		set(ref(database, 'test/'), {
+			treatsData,
+		});
+		setTreatsData([]);
+	};
 	return (
 		<>
 			<ul>{treatsList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={handleClick}>add</button>
+			<button onClick={writeData}>write data</button>
 		</>
 	);
 }
