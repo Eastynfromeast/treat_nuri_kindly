@@ -1,11 +1,11 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import firebaseConfig, { database } from './Firebase';
-
+import { set, ref } from 'firebase/database';
 // 클래스로 변경해보고 싶다
 function InputTreats() {
-	const [treats, setTreats] = useState([{ id: 1, name: '간식 샘플' }]);
+	const [treats, setTreats] = useState([{ id: 0, name: '간식 샘플' }]);
 	const [inputText, setInputText] = useState('');
-	const [nextId, setNextId] = useState(2);
+	const [nextId, setNextId] = useState(1);
 
 	const onChange = e => setInputText(e.target.value);
 	const handleClick = () => {
@@ -16,6 +16,7 @@ function InputTreats() {
 		setNextId(nextId + 1);
 		setTreats(newList);
 		setInputText('');
+		setTreatsData(newList);
 	};
 	const handleDelete = id => {
 		const newList = treats.filter(treats => treats.id !== id);
@@ -42,14 +43,16 @@ function InputTreats() {
 		set(ref(database, 'test/'), {
 			treatsData,
 		});
-		setTreatsData([]);
+		setTreats([]);
 	};
 	return (
 		<>
 			<ul>{treatsList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={handleClick}>add</button>
-			<button onClick={writeData}>write data</button>
+			<button className="Btn-submit-treats" onClick={writeData}>
+				Update
+			</button>
 		</>
 	);
 }
