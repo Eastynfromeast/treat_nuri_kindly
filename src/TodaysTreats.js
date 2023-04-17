@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import InputTreats from './InputTreats';
 import { getDownloadURL, child, push, update } from 'firebase/database';
 
 function updateNewDailyTreats(date, dailyTreats) {
@@ -20,26 +19,11 @@ function updateNewDailyTreats(date, dailyTreats) {
 }
 
 function AddTodaysTreats() {
-	const setDate = () => {
-		let now = new Date();
-		let todayYear = now.getFullYear();
-		let todayMonth = now.getMonth() + 1;
-		let todayDate = now.getDate();
-		return todayYear + '-' + todayMonth + '-' + todayDate;
-	};
-
 	// const getTreatsData = x => {
 	// 	console.log(x);
 	// };
-
-	// const handleTreatsChange = e => {
-	// 	setTreatsData(e.target.value);
-	// };
-
 	return (
-		<div className="dailyTreats-data">
-			<h2>{setDate()}</h2>
-			<InputTreats />
+		<div>
 			{/* <input type="text" value={treatsData} onChange={handleTreatsChange}></input> */}
 			{/* <button onClick={writeData}>write data</button> */}
 		</div>
