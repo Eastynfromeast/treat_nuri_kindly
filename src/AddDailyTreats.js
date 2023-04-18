@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import firebaseConfig, { database } from './Firebase';
-import { set, ref, get, child } from 'firebase/database';
+import { set, ref, get, child, onValue } from 'firebase/database';
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
 	const [treats, setTreats] = useState([{ id: 0, treats: '간식 샘플' }]);
@@ -36,7 +36,8 @@ function AddDailyTreats() {
 		}
 	};
 
-	const [date, setDate] = useState();
+	// const [uploadedData, setUploadeData] = useState({ id, treats });
+
 	const getDate = () => {
 		let now = new Date();
 		let todayYear = now.getFullYear();
@@ -47,35 +48,53 @@ function AddDailyTreats() {
 	const today = getDate();
 	// getTreatsData(treatsList);
 	const [treatsData, setTreatsData] = useState([]);
+
 	const dbRef = ref(database);
 	// Write
 	const writeData = () => {
 		set(ref(database, '/' + today), {
 			treatsData,
 		}).then(() => {
-			get(child(dbRef, '/' + today))
-				.then(snapshot => {
-					if (snapshot.exists()) {
-						// console.log(snapshot.val());
-						setTreats(snapshot.val());
-					} else {
-						console.log('No data available');
-					}
-				})
-				.catch(error => {
-					console.error(error);
-				});
-			const newList = treats.concat({
-				id: nextId,
-				treats: inputText,
-			});
+			alert('Treats data is uploaded');
 		});
-		setTreats([]);
+		// setTreats([]);
 	};
 
+	const [dailyData, setDailyData] = useState([]);
+	// const dailyDataList = dailyData.map(dailyData => <li key={dailyData.id}>{dailyData.treats}</li>);
+	get(child(dbRef, '/' + today))
+		.then(snapshot => {
+			if (snapshot.exists()) {
+				// console.log(snapshot.val());
+			} else {
+				console.log('No data available');
+			}
+		})
+		.catch(error => {
+			console.error(error);
+		});
+
+	onValue(
+		dbRef,
+		snapshot => {
+			snapshot.forEach(childSnapshot => {
+				const childKey = childSnapshot.key;
+				const childData = childSnapshot.val();
+				if (childKey == getDate()) {
+					const todaysData = childData.treatsData;
+					console.log(typeof todaysData);
+					console.log(todaysData);
+				}
+			});
+		},
+		{
+			onlyOnce: true,
+		}
+	);
 	return (
 		<div className="dailyTreats-data">
 			<h2>{getDate()}</h2>
+			<ul>{dailyData}</ul>
 			<ul>{treatsList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={addTreat}>add</button>
