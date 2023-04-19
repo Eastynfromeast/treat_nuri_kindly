@@ -38,14 +38,14 @@ function AddDailyTreats() {
 
 	// const [uploadedData, setUploadeData] = useState({ id, treats });
 
-	const getDate = () => {
+	const getTodayDate = () => {
 		let now = new Date();
 		let todayYear = now.getFullYear();
 		let todayMonth = now.getMonth() + 1;
 		let todayDate = now.getDate();
 		return todayYear + '-' + todayMonth + '-' + todayDate;
 	};
-	const today = getDate();
+	const today = getTodayDate();
 	// getTreatsData(treatsList);
 	const [treatsData, setTreatsData] = useState([]);
 
@@ -62,17 +62,17 @@ function AddDailyTreats() {
 
 	const [dailyData, setDailyData] = useState([]);
 	// const dailyDataList = dailyData.map(dailyData => <li key={dailyData.id}>{dailyData.treats}</li>);
-	get(child(dbRef, '/' + today))
-		.then(snapshot => {
-			if (snapshot.exists()) {
-				// console.log(snapshot.val());
-			} else {
-				console.log('No data available');
-			}
-		})
-		.catch(error => {
-			console.error(error);
-		});
+	// get(child(dbRef, '/' + today))
+	// 	.then(snapshot => {
+	// 		if (snapshot.exists()) {
+	// 			// console.log(snapshot.val());
+	// 		} else {
+	// 			console.log('No data available');
+	// 		}
+	// 	})
+	// 	.catch(error => {
+	// 		console.error(error);
+	// 	});
 
 	onValue(
 		dbRef,
@@ -80,10 +80,16 @@ function AddDailyTreats() {
 			snapshot.forEach(childSnapshot => {
 				const childKey = childSnapshot.key;
 				const childData = childSnapshot.val();
-				if (childKey == getDate()) {
+				if (childKey == today) {
 					const todaysData = childData.treatsData;
-					console.log(typeof todaysData);
-					console.log(todaysData);
+					// return (
+					// 	<div>
+					// 		{todaysData.map(todaysData => (
+					// 			<todaysData todaysData={todaysData} key={todaysData.id}></todaysData>
+					// 		))}
+					// 	</div>
+					// );
+					return todaysData;
 				}
 			});
 		},
@@ -91,10 +97,13 @@ function AddDailyTreats() {
 			onlyOnce: true,
 		}
 	);
+	function setTodaysDataList(todaysData) {
+		console.log(todaysData);
+	}
 	return (
 		<div className="dailyTreats-data">
-			<h2>{getDate()}</h2>
-			<ul>{dailyData}</ul>
+			<h2>{today}</h2>
+			<ul>{setTodaysDataList()}</ul>
 			<ul>{treatsList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={addTreat}>add</button>
