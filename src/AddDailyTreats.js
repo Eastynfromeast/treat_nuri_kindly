@@ -60,7 +60,6 @@ function AddDailyTreats() {
 		// setTreats([]);
 	};
 
-	const [dailyData, setDailyData] = useState([]);
 	// const dailyDataList = dailyData.map(dailyData => <li key={dailyData.id}>{dailyData.treats}</li>);
 	// get(child(dbRef, '/' + today))
 	// 	.then(snapshot => {
@@ -73,43 +72,41 @@ function AddDailyTreats() {
 	// 	.catch(error => {
 	// 		console.error(error);
 	// 	});
+	function GetTodaysDataList() {
+		onValue(
+			dbRef,
+			snapshot => {
+				snapshot.forEach(childSnapshot => {
+					const childKey = childSnapshot.key;
+					const childData = childSnapshot.val();
+					if (childKey == today) {
+						const todaysData = childData.treatsData;
+						console.log(todaysData);
+						const todaysDataList = todaysData.map(todaysData => <li key={todaysData.id}>{todaysData.treats}</li>);
+						return <ul>{todaysDataList}</ul>;
+						// return todaysData;
+					}
+				});
+			},
+			{
+				onlyOnce: true,
+			}
+		);
+	}
 
-	onValue(
-		dbRef,
-		snapshot => {
-			snapshot.forEach(childSnapshot => {
-				const childKey = childSnapshot.key;
-				const childData = childSnapshot.val();
-				if (childKey == today) {
-					const todaysData = childData.treatsData;
-					// return (
-					// 	<div>
-					// 		{todaysData.map(todaysData => (
-					// 			<todaysData todaysData={todaysData} key={todaysData.id}></todaysData>
-					// 		))}
-					// 	</div>
-					// );
-					return todaysData;
-				}
-			});
-		},
-		{
-			onlyOnce: true,
-		}
-	);
 	function setTodaysDataList(todaysData) {
 		console.log(todaysData);
 	}
 	return (
 		<div className="dailyTreats-data">
 			<h2>{today}</h2>
-			<ul>{setTodaysDataList()}</ul>
 			<ul>{treatsList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
 			<button onClick={addTreat}>add</button>
 			<button className="Btn-submit-treats" onClick={writeData}>
 				Write Data
 			</button>
+			<GetTodaysDataList />
 		</div>
 	);
 }
