@@ -1,11 +1,24 @@
-import React, { useState, useRef, forwardRef } from 'react';
+import React, { useState, useRef, forwardRef, useEffect } from 'react';
 import firebaseConfig, { database } from './Firebase';
 import { set, ref, get, child, onValue } from 'firebase/database';
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
-	const [treats, setTreats] = useState([{ id: 0, treats: '간식 샘플' }]);
+	const [treats, setTreats] = useState([]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(1);
+
+	useEffect(() => {
+		connectTodaysDataListDB();
+		// async function fetchData() {
+		// 	await getTodaysDataList();
+		// 	console.log(response);
+		// 	//   const response = await fetch('https://example.com/data');
+		// 	//   const result = await response.json();
+		// 	//   setData(result);
+		// }
+
+		// fetchData();
+	}, []);
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
@@ -54,8 +67,10 @@ function AddDailyTreats() {
 	const writeData = () => {
 		set(ref(database, '/' + today), {
 			treatsData,
-		}).then(() => {
+		}).then(result => {
 			alert('Treats data is uploaded');
+			treats.push(result);
+			setTreats(treats);
 		});
 		// setTreats([]);
 	};
@@ -72,7 +87,7 @@ function AddDailyTreats() {
 	// 	.catch(error => {
 	// 		console.error(error);
 	// 	});
-	function GetTodaysDataList() {
+	function connectTodaysDataListDB() {
 		onValue(
 			dbRef,
 			snapshot => {
@@ -82,8 +97,9 @@ function AddDailyTreats() {
 					if (childKey == today) {
 						const todaysData = childData.treatsData;
 						console.log(todaysData);
-						const todaysDataList = todaysData.map(todaysData => <li key={todaysData.id}>{todaysData.treats}</li>);
-						return <ul>{todaysDataList}</ul>;
+						setTreats(todaysData);
+						// const todaysDataList = todaysData.map(todaysData => <li key={todaysData.id}>{todaysData.treats}</li>);
+						// return <ul>{todaysDataList}</ul>;
 						// return todaysData;
 					}
 				});
@@ -101,12 +117,17 @@ function AddDailyTreats() {
 		<div className="dailyTreats-data">
 			<h2>{today}</h2>
 			<ul>{treatsList}</ul>
-			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="Type the treats nuri got" />
+			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="간식" />
 			<button onClick={addTreat}>add</button>
 			<button className="Btn-submit-treats" onClick={writeData}>
 				Write Data
 			</button>
-			<GetTodaysDataList />
+			{/* <GetTodaysDataList /> */}
+			{/* <ul>
+				{treats.map((treat, index) => (
+					<li key={index}>{treat.treats}</li>
+				))}
+			</ul> */}
 		</div>
 	);
 }
