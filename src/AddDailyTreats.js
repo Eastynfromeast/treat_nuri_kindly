@@ -1,9 +1,9 @@
-import React, { useState, useRef, forwardRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database } from './Firebase';
-import { set, ref, get, child, onValue } from 'firebase/database';
+import { set, ref, onValue } from 'firebase/database';
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
-	const [treats, setTreats] = useState([]);
+	const [item, setItem] = useState([{ id: '', title: '' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(1);
 
@@ -22,24 +22,24 @@ function AddDailyTreats() {
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
-		const newList = treats.concat({
+		const newList = item.concat({
 			id: nextId,
-			treats: inputText,
+			title: inputText,
 		});
 		setNextId(nextId + 1);
-		setTreats(newList);
+		setItem(newList);
 		setInputText('');
-		setTreatsData(newList);
+		setTreat(newList);
 	};
 	const handleDelete = id => {
-		const newList = treats.filter(treats => treats.id !== id);
-		setTreats(newList);
+		const newList = item.filter(item => item.id !== id);
+		setItem(newList);
 	};
 
-	const treatsList = treats.map(treats => (
-		<li key={treats.id}>
-			{treats.treats}
-			<button onClick={() => handleDelete(treats.id)}>delete</button>
+	const itmesList = item.map(item => (
+		<li key={item.id}>
+			{item.title}
+			<button onClick={() => handleDelete(item.id)}>delete</button>
 		</li>
 	));
 
@@ -59,18 +59,18 @@ function AddDailyTreats() {
 		return todayYear + '-' + todayMonth + '-' + todayDate;
 	};
 	const today = getTodayDate();
-	// getTreatsData(treatsList);
-	const [treatsData, setTreatsData] = useState([]);
+
+	const [treat, setTreat] = useState([]);
 
 	const dbRef = ref(database);
 	// Write
 	const writeData = () => {
 		set(ref(database, '/' + today), {
-			treatsData,
+			treat,
 		}).then(result => {
 			alert('Treats data is uploaded');
-			treats.push(result);
-			setTreats(treats);
+			// treat.push(result);
+			setItem(treat);
 		});
 		// setTreats([]);
 	};
@@ -95,12 +95,9 @@ function AddDailyTreats() {
 					const childKey = childSnapshot.key;
 					const childData = childSnapshot.val();
 					if (childKey == today) {
-						const todaysData = childData.treatsData;
+						const todaysData = childData.treat;
 						console.log(todaysData);
-						setTreats(todaysData);
-						// const todaysDataList = todaysData.map(todaysData => <li key={todaysData.id}>{todaysData.treats}</li>);
-						// return <ul>{todaysDataList}</ul>;
-						// return todaysData;
+						setItem(todaysData);
 					}
 				});
 			},
@@ -110,24 +107,16 @@ function AddDailyTreats() {
 		);
 	}
 
-	function setTodaysDataList(todaysData) {
-		console.log(todaysData);
-	}
 	return (
 		<div className="dailyTreats-data">
 			<h2>{today}</h2>
-			<ul>{treatsList}</ul>
+			<ul>{itmesList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="간식" />
 			<button onClick={addTreat}>add</button>
 			<button className="Btn-submit-treats" onClick={writeData}>
 				Write Data
 			</button>
 			{/* <GetTodaysDataList /> */}
-			{/* <ul>
-				{treats.map((treat, index) => (
-					<li key={index}>{treat.treats}</li>
-				))}
-			</ul> */}
 		</div>
 	);
 }
