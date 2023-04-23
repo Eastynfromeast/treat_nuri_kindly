@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
+import uuid from 'react-uuid';
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
 	const [item, setItem] = useState([{ id: '', title: '' }]);
@@ -22,24 +23,26 @@ function AddDailyTreats() {
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
+		const date = new Date();
 		const newList = item.concat({
-			id: nextId,
+			id: uuid(),
 			title: inputText,
+			createdAt: date.getTime() + 3600000 * 9,
 		});
-		setNextId(nextId + 1);
+		// setNextId(nextId + 1);
 		setItem(newList);
 		setInputText('');
 		setTreat(newList);
 	};
-	const handleDelete = id => {
-		const newList = item.filter(item => item.id !== id);
+	const handleDelete = createdAt => {
+		const newList = item.filter(item => item.createdAt !== createdAt);
 		setItem(newList);
 	};
 
 	const itmesList = item.map(item => (
-		<li key={item.id}>
+		<li key={item.createdAt}>
 			{item.title}
-			<button onClick={() => handleDelete(item.id)}>delete</button>
+			<button onClick={() => handleDelete(item.createdAt)}>delete</button>
 		</li>
 	));
 
