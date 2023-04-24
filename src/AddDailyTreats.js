@@ -4,7 +4,7 @@ import { set, ref, onValue } from 'firebase/database';
 import uuid from 'react-uuid';
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
-	const [item, setItem] = useState([{ id: '', title: '' }]);
+	const [item, setItem] = useState([{ id: '', title: '', createdAt: 'now' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(1);
 
@@ -23,11 +23,19 @@ function AddDailyTreats() {
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
-		const date = new Date();
+		let date = new Date();
+		let createdAt = new Intl.DateTimeFormat('en-US', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+		}).format(date);
 		const newList = item.concat({
 			id: uuid(),
 			title: inputText,
-			createdAt: date.getTime() + 3600000 * 9,
+			createdAt: createdAt,
 		});
 		// setNextId(nextId + 1);
 		setItem(newList);
@@ -61,10 +69,9 @@ function AddDailyTreats() {
 		let todayDate = now.getDate();
 		return todayYear + '-' + todayMonth + '-' + todayDate;
 	};
+
 	const today = getTodayDate();
-
 	const [treat, setTreat] = useState([]);
-
 	const dbRef = ref(database);
 	// Write
 	const writeData = () => {
