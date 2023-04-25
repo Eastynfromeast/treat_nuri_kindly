@@ -32,6 +32,22 @@ ul {
 .App-link {
 	color: #61dafb;
 }
+.dailyTreats-data {
+	max-width: 400px;
+	margin: 0 auto;
+}
+.dailyTreats-data > ul {
+	margin: 0 auto 50px;
+}
+.dailyTreats-data ul > li {
+	height: 30px;
+}
+button {
+	margin-left: 30px;
+	display: inline-block;
+	border-radius: 50%;
+	background: darkkhaki;
+}
 
 @keyframes App-logo-spin {
 	from {
