@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import firebaseConfig, { database } from './Firebase';
+import firebaseConfig, { database, db } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
 import uuid from 'react-uuid';
+
+console.log(db);
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
 	const [item, setItem] = useState([{ id: '', title: '', createdAt: 'now' }]);
