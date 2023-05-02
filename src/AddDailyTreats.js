@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database, db } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
+import { doc, setDoc } from 'firebase/firestore';
 import uuid from 'react-uuid';
 
-console.log(db);
 // 클래스로 변경해보고 싶다
 function AddDailyTreats() {
 	const [item, setItem] = useState([{ id: '', title: '', createdAt: 'now' }]);
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(1);
 
-	useEffect(() => {
-		connectTodaysDataListDB();
-		// async function fetchData() {
-		// 	await getTodaysDataList();
-		// 	console.log(response);
-		// 	//   const response = await fetch('https://example.com/data');
-		// 	//   const result = await response.json();
-		// 	//   setData(result);
-		// }
+	// useEffect(() => {
+	// 	connectTodaysDataListDB();
+	// 	// async function fetchData() {
+	// 	// 	await getTodaysDataList();
+	// 	// 	console.log(response);
+	// 	// 	//   const response = await fetch('https://example.com/data');
+	// 	// 	//   const result = await response.json();
+	// 	// 	//   setData(result);
+	// 	// }
 
-		// fetchData();
-	}, []);
+	// 	// fetchData();
+	// }, []);
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
@@ -86,38 +86,35 @@ function AddDailyTreats() {
 		});
 		// setTreats([]);
 	};
+	// FireStore Update
+	const updateDB = () => {
+		setDoc(doc(db, 'nuri123', today), {
+			treat,
+		}).then(result => {
+			alert('Treats data is uploaded');
+			setItem(treat);
+		});
+	};
 
-	// const dailyDataList = dailyData.map(dailyData => <li key={dailyData.id}>{dailyData.treats}</li>);
-	// get(child(dbRef, '/' + today))
-	// 	.then(snapshot => {
-	// 		if (snapshot.exists()) {
-	// 			// console.log(snapshot.val());
-	// 		} else {
-	// 			console.log('No data available');
+	// function connectTodaysDataListDB() {
+	// 	onValue(
+	// 		dbRef,
+	// 		snapshot => {
+	// 			snapshot.forEach(childSnapshot => {
+	// 				const childKey = childSnapshot.key;
+	// 				const childData = childSnapshot.val();
+	// 				if (childKey == today) {
+	// 					const todaysData = childData.treat;
+	// 					console.log(todaysData);
+	// 					setItem(todaysData);
+	// 				}
+	// 			});
+	// 		},
+	// 		{
+	// 			onlyOnce: true,
 	// 		}
-	// 	})
-	// 	.catch(error => {
-	// 		console.error(error);
-	// 	});
-	function connectTodaysDataListDB() {
-		onValue(
-			dbRef,
-			snapshot => {
-				snapshot.forEach(childSnapshot => {
-					const childKey = childSnapshot.key;
-					const childData = childSnapshot.val();
-					if (childKey == today) {
-						const todaysData = childData.treat;
-						console.log(todaysData);
-						setItem(todaysData);
-					}
-				});
-			},
-			{
-				onlyOnce: true,
-			}
-		);
-	}
+	// 	);
+	// }
 
 	return (
 		<div className="dailyTreats-data">
@@ -125,8 +122,8 @@ function AddDailyTreats() {
 			<ul>{itmesList}</ul>
 			<input value={inputText} onChange={onChange} onKeyPress={handleOnKeyPress} placeholder="간식" />
 			<button onClick={addTreat}>add</button>
-			<button className="Btn-submit-treats" onClick={writeData}>
-				Write Data
+			<button className="Btn-submit-treats" onClick={updateDB}>
+				update
 			</button>
 			{/* <GetTodaysDataList /> */}
 		</div>
