@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database, db } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import uuid from 'react-uuid';
 
 // 클래스로 변경해보고 싶다
@@ -10,18 +10,9 @@ function AddDailyTreats() {
 	const [inputText, setInputText] = useState('');
 	const [nextId, setNextId] = useState(1);
 
-	// useEffect(() => {
-	// 	connectTodaysDataListDB();
-	// 	// async function fetchData() {
-	// 	// 	await getTodaysDataList();
-	// 	// 	console.log(response);
-	// 	// 	//   const response = await fetch('https://example.com/data');
-	// 	// 	//   const result = await response.json();
-	// 	// 	//   setData(result);
-	// 	// }
-
-	// 	// fetchData();
-	// }, []);
+	useEffect(() => {
+		connectTodaysDataListDB();
+	}, []);
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
@@ -75,20 +66,12 @@ function AddDailyTreats() {
 	const today = getTodayDate();
 	const [treat, setTreat] = useState([]);
 	const dbRef = ref(database);
-	// Write
-	const writeData = () => {
-		set(ref(database, '/' + today), {
-			treat,
-		}).then(result => {
-			alert('Treats data is uploaded');
-			// treat.push(result);
-			setItem(treat);
-		});
-		// setTreats([]);
-	};
+	const docRef = doc(db, 'nuri123', today);
+	const docSnap = await getDoc(docRef);
+
 	// FireStore Update
 	const updateDB = () => {
-		setDoc(doc(db, 'nuri123', today), {
+		setDoc(docRef, {
 			treat,
 		}).then(result => {
 			alert('Treats data is uploaded');
@@ -96,25 +79,32 @@ function AddDailyTreats() {
 		});
 	};
 
-	// function connectTodaysDataListDB() {
-	// 	onValue(
-	// 		dbRef,
-	// 		snapshot => {
-	// 			snapshot.forEach(childSnapshot => {
-	// 				const childKey = childSnapshot.key;
-	// 				const childData = childSnapshot.val();
-	// 				if (childKey == today) {
-	// 					const todaysData = childData.treat;
-	// 					console.log(todaysData);
-	// 					setItem(todaysData);
-	// 				}
-	// 			});
-	// 		},
-	// 		{
-	// 			onlyOnce: true,
-	// 		}
-	// 	);
-	// }
+	function connectTodaysDataListDB() {
+		// onValue(
+		// 	dbRef,
+		// 	snapshot => {
+		// 		snapshot.forEach(childSnapshot => {
+		// 			const childKey = childSnapshot.key;
+		// 			const childData = childSnapshot.val();
+		// 			if (childKey == today) {
+		// 				const todaysData = childData.treat;
+		// 				console.log(todaysData);
+		// 				setItem(todaysData);
+		// 			}
+		// 		});
+		// 	},
+		// 	{
+		// 		onlyOnce: true,
+		// 	}
+		// );
+
+		if (docSnap.exists()) {
+			console.log('Document data:', docSnap.data());
+		} else {
+			// docSnap.data() will be undefined in this case
+			console.log('No such document!');
+		}
+	}
 
 	return (
 		<div className="dailyTreats-data">
