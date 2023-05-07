@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database, db } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection } from 'firebase/firestore';
 import uuid from 'react-uuid';
 
 // 클래스로 변경해보고 싶다
@@ -65,9 +65,8 @@ function AddDailyTreats() {
 
 	const today = getTodayDate();
 	const [treat, setTreat] = useState([]);
-	const dbRef = ref(database);
+
 	const docRef = doc(db, 'nuri123', today);
-	const docSnap = await getDoc(docRef);
 
 	// FireStore Update
 	const updateDB = () => {
@@ -79,7 +78,7 @@ function AddDailyTreats() {
 		});
 	};
 
-	function connectTodaysDataListDB() {
+	async function connectTodaysDataListDB() {
 		// onValue(
 		// 	dbRef,
 		// 	snapshot => {
@@ -97,7 +96,7 @@ function AddDailyTreats() {
 		// 		onlyOnce: true,
 		// 	}
 		// );
-
+		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
 			console.log('Document data:', docSnap.data());
 		} else {
