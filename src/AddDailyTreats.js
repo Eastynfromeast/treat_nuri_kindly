@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebaseConfig, { database, db } from './Firebase';
 import { set, ref, onValue } from 'firebase/database';
-import { doc, setDoc, getDoc, collection } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, onSnapshot } from 'firebase/firestore';
 import uuid from 'react-uuid';
 
 // 클래스로 변경해보고 싶다
@@ -96,13 +96,16 @@ function AddDailyTreats() {
 		// 		onlyOnce: true,
 		// 	}
 		// );
-		const docSnap = await getDoc(docRef);
-		if (docSnap.exists()) {
-			console.log('Document data:', docSnap.data());
-		} else {
-			// docSnap.data() will be undefined in this case
-			console.log('No such document!');
-		}
+		// const docSnap = await getDoc(docRef);
+		// if (docSnap.exists()) {
+		// 	console.log('Document data:', docSnap.data());
+		// } else {
+		// 	// docSnap.data() will be undefined in this case
+		// 	console.log('No such document!');
+		// }
+		const unsub = onSnapshot(docRef, doc => {
+			setItem(doc.data().treat);
+		});
 	}
 
 	return (
