@@ -8,11 +8,10 @@ import uuid from 'react-uuid';
 function AddDailyTreats() {
 	const [item, setItem] = useState([{ id: '', title: '', createdAt: 'now' }]);
 	const [inputText, setInputText] = useState('');
-	const [nextId, setNextId] = useState(1);
 
-	useEffect(() => {
-		connectTodaysDataListDB();
-	}, []);
+	// useEffect(() => {
+	// 	connectTodaysDataListDB();
+	// }, []);
 
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
@@ -30,7 +29,7 @@ function AddDailyTreats() {
 			title: inputText,
 			createdAt: createdAt,
 		});
-		// setNextId(nextId + 1);
+
 		setItem(newList);
 		setInputText('');
 		setTreat(newList);
@@ -53,8 +52,6 @@ function AddDailyTreats() {
 		}
 	};
 
-	// const [uploadedData, setUploadeData] = useState({ id, treats });
-
 	const getTodayDate = () => {
 		let now = new Date();
 		let todayYear = now.getFullYear();
@@ -74,11 +71,12 @@ function AddDailyTreats() {
 			treat,
 		}).then(result => {
 			alert('Treats data is uploaded');
-			setItem(treat);
+			// setItem(treat)
+			connectTodaysDataListDB();
 		});
 	};
 
-	async function connectTodaysDataListDB() {
+	function connectTodaysDataListDB() {
 		// onValue(
 		// 	dbRef,
 		// 	snapshot => {
@@ -96,16 +94,13 @@ function AddDailyTreats() {
 		// 		onlyOnce: true,
 		// 	}
 		// );
-		// const docSnap = await getDoc(docRef);
-		// if (docSnap.exists()) {
-		// 	console.log('Document data:', docSnap.data());
-		// } else {
-		// 	// docSnap.data() will be undefined in this case
-		// 	console.log('No such document!');
-		// }
 		const unsub = onSnapshot(docRef, doc => {
 			setItem(doc.data().treat);
 		});
+	}
+
+	function callYesterdayData() {
+		const yesterday = new Date().setDate;
 	}
 
 	return (
@@ -117,7 +112,6 @@ function AddDailyTreats() {
 			<button className="Btn-submit-treats" onClick={updateDB}>
 				update
 			</button>
-			{/* <GetTodaysDataList /> */}
 		</div>
 	);
 }
