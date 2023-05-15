@@ -9,21 +9,29 @@ function AddDailyTreats() {
 	const [item, setItem] = useState([{ id: '', title: '', createdAt: 'now' }]);
 	const [inputText, setInputText] = useState('');
 
-	// useEffect(() => {
-	// 	connectTodaysDataListDB();
-	// }, []);
-
+	useEffect(() => {
+		checkAndGetData();
+	});
+	async function checkAndGetData() {
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			setItem(docSnap.data().treat);
+		} else {
+			// docSnap.data() will be undefined in this case
+			console.log('No such document!');
+		}
+	}
 	const onChange = e => setInputText(e.target.value);
 	const addTreat = () => {
-		let date = new Date();
+		let createdDate = new Date();
 		let createdAt = new Intl.DateTimeFormat('en-US', {
 			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
+			month: 'numeric',
+			day: 'numeric',
 			hour: '2-digit',
 			minute: '2-digit',
 			second: '2-digit',
-		}).format(date);
+		}).format(createdDate);
 		const newList = item.concat({
 			id: uuid(),
 			title: inputText,
@@ -51,13 +59,25 @@ function AddDailyTreats() {
 			addTreat();
 		}
 	};
+	function leftPad(value) {
+		if (value >= 10) {
+			return value;
+		}
 
+		return `0${value}`;
+	}
 	const getTodayDate = () => {
 		let now = new Date();
 		let todayYear = now.getFullYear();
-		let todayMonth = now.getMonth() + 1;
-		let todayDate = now.getDate();
+		let todayMonth = leftPad(now.getMonth() + 1);
+		let todayDate = leftPad(now.getDate());
 		return todayYear + '-' + todayMonth + '-' + todayDate;
+		// let nowForTitle = new Intl.DateTimeFormat('ko-KR', {
+		// 	year: 'numeric',
+		// 	month: '2-digit',
+		// 	day: '2-digit',
+		// }).format(now);
+		// return nowForTitle;
 	};
 
 	const today = getTodayDate();
